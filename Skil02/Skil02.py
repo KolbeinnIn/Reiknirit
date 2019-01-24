@@ -1,20 +1,6 @@
 # Kolbeinn Ingólfsson
 # Skilaverkefni 2 - FORR3RR05DU
 
-# 1.
-"""
-
-
-"""
-
-# 2.
-
-"""
-forrit skilgreinir fallið 'tviundakerfi' og tekur inn tölu
-    ef sú tala er stærri en 0
-        þá kallar fallið á sig sjálft með tölunni deilt með tveimur
-        og skrifar út töluna modulus 2
-"""
 
 # 3.
 def summa(n):
