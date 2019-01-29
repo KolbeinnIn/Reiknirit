@@ -31,7 +31,10 @@ print("\n-----------")
 # 5.
 def þversumma(n):
     if "0" in str(n):
-        n = eval(str(n).replace("0", ""))
+        n = str(n).replace("0", "")
+        if len(n) == 0:
+            return 0
+        n = eval(n)
     if len(str(n)) == 1:
         return n
     else:
@@ -39,7 +42,7 @@ def þversumma(n):
 
 
 print("Dæmi 5")
-for x in [1206, 1209, 1567, 10000006, 600]:
+for x in [1206, 1209, 1567, 10000006, 600, 0]:
     print("Þversumman af %s er:" % x, þversumma(x))
 print("-----------")
 

@@ -1,0 +1,13 @@
+patrik - reyk = 392
+patrik - hallorm = 779 
+patrik - laugar = 551
+patrik - kirkju = 620
+
+reykj - hallorm = 570
+reykj - laugar = 408
+reykj - kirkju = 251
+
+hallorm - laugar = 227
+hallorm - kirkju = 374
+
+kirkju - laugar = 372
