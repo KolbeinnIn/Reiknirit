@@ -20,10 +20,7 @@ print("Dæmi 1")
 hanoi(3, "A", "B", "C")
 
 # 2
-"""
-O(2^n)
 
-"""
 
 # 3
 """
@@ -39,11 +36,9 @@ __________
 (26-n)!*n!
 """
 
-
 alisti = ascii_lowercase
 listi2 = []
 sys.setrecursionlimit(10000)
-
 
 def strengur(n, s="", t=0):
     if n > 26:
