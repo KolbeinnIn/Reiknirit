@@ -15,7 +15,6 @@ def hanoi(n, a, b, c):
         hanoi(n - 1, c, b, a)
 
 
-# 1
 print("Dæmi 1")
 hanoi(3, "A", "B", "C")
 
@@ -33,7 +32,9 @@ O(2^n)
 """
 
 # 4
+print("Dæmi 4")
 """
+a)
     26!
 __________
 (26-n)!*n!
@@ -42,7 +43,7 @@ __________
 
 alisti = ascii_lowercase
 listi2 = []
-sys.setrecursionlimit(10000)
+sys.setrecursionlimit(10000) #recursions limit hækkað svo hægt sé að keyra quicksort með öllum lengdum á lista (ATH! sjá línu 60)
 
 
 def strengur(n, s="", t=0):
@@ -56,13 +57,13 @@ def strengur(n, s="", t=0):
             t += 1
             strengur(n - 1, s + alisti[x], t)
 
-print("Dæmi 4")
+print("ATH! það kemur stack overflow í sorting hluta verkefnisins ef sett er inn meira en 3\ncombination fallið virkar með öllu.")
 n = int(input("strengur(n):"))
 strengur(n)
 print(listi2)
 
 print("Dæmi 5")
-listi2.reverse()
+listi2.reverse() #listinn reversast til að sýna fram á að sorting fallið virki
 print(listi2)
 
 tlisti = [5, 2, 7, 8, 4]
@@ -91,14 +92,6 @@ def quicksort(listi, low, high):
 
 
 quicksort(listi2, 0, len(listi2)-1)
-#part(listi2, 0, len(listi2)-1)
+#quicksort(tlisti, 0, len(tlisti)-1)
 print(listi2)
-
-
-"""
-print(ascii_lowercase)
-print(digits)
-print(hexdigits)
-print(octdigits)
-print(punctuation)
-"""
+#print(tlisti)
