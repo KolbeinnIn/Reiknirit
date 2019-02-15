@@ -107,12 +107,82 @@ def rada(tala, listi):
                 return True
 
 
-tala = int(input("Veldu tölu til að bæta í listann: "))
+#tala = int(input("Veldu tölu til að bæta í listann: "))
+tala = 5
 print(rada_listi)
 print(rada(tala, rada_listi))
 print(rada_listi)
 
 
+class Node:
+    def __init__(self, v):
+        self.value = v
+        self.left = None
+        self.right = None
 
+    def insert(self, d):
+        if self.value == d:
+            return False
+
+        elif self.value > d:
+            if self.left:
+                return self.left.insert(d)
+            else:
+                self.left = Node(d)
+                return True
+        else:
+            if self.right:
+                return self.right.insert(d)
+            else:
+                self.right = Node(d)
+                return True
+
+    def find(self, d):
+        if self.value == d:
+            return True
+
+        elif self.value > d:
+            if self.left:
+                return self.left.find(d)
+            else:
+                return False
+        else:
+            if self.right:
+                return self.right.find(d)
+            else:
+                return False
+
+
+class Tree:
+    def __init__(self):
+        self.root = None
+
+    def insert(self, d):
+        if self.root:
+            return self.root.insert(d)
+        else:
+            self.root = Node(d)
+            return True
+
+    def find(self, d):
+        if self.root:
+            return self.root.find(d)
+        else:
+            return False
+
+
+t = Tree()
+
+print("\n---Find 8---")
+print(t.find(8))
+print("---Insert---")
+print(t.insert(6))
+print(t.insert(2))
+print(t.insert(3))
+print(t.insert(7))
+print("----Find----")
+print(t.find(8))
+print(t.insert(8))
+print(t.find(8))
 
 
