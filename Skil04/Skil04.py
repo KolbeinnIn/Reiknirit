@@ -40,9 +40,10 @@ b) Þetta reiknirit er kallað "Counting sort"
 c) Flækjustig fallsins er O(n + k). k er bilið á milli stærsta staksins og því minnsta
 """)
 
-randlisti = [randint(0, 10) for i in range(10)]
+# randlisti = [randint(0, 10) for i in range(10)]
+randlisti = [1, 2, 5, 6, 7, 8]
 # 2
-print("Dæmi 2")
+print("Dæmi 2:")
 
 
 def linear(stak, listi):
@@ -53,8 +54,8 @@ def linear(stak, listi):
 
 
 print(randlisti)
-#tala = int(input("linear(n): "))
-tala = 5
+# tala = int(input("linear(n): "))
+tala = 9
 a = linear(tala, randlisti)
 if a != -1:
     print("Talan %d er í sæti %d" % (tala, a))
@@ -66,9 +67,8 @@ print("")
 
 # 3
 def bin(tala, listi, low, high):
-    if low < high:
+    if low <= high and tala < high:
         mid = (high + low) // 2
-
         if tala == listi[mid]:
             return mid
         elif tala > listi[mid]:
@@ -78,9 +78,12 @@ def bin(tala, listi, low, high):
     else:
         return -1
 
-print("Dæmi 3")
-print(randlisti)
-print(bin(5, randlisti, 0, len(randlisti)))
+
+print("Dæmi 3:")
+listi = [x for x in range(10)]
+#listi = [0, 1, 2, 4, 6, 7, 8, 9]
+print(listi)
+print(bin(10, listi, 0, len(listi)))
 
 # 4
 print("""
@@ -89,10 +92,12 @@ a) flækjustigið er O(n) vegna þess að það er ein for lykkja í fallinu
 b) O(log n) vegna þess að í hvert skipti sem fallið keyrir helmingast listinn
 """)
 
-rada_listi = [x for x in range(11)]
+rada_listi = [x for x in range(2, 11)]
 
 # 5
-print("Dæmi 5")
+print("Dæmi 5:")
+
+
 def rada(tala, listi):
     if len(listi) == 0 or tala > listi[-1]:
         listi.append(tala)
@@ -102,16 +107,19 @@ def rada(tala, listi):
         return True
     else:
         for x in range(len(listi)):
-            if listi[x] <= tala <= listi[x+1]:
-                listi.insert(x+1, tala)
+            if listi[x] <= tala <= listi[x + 1]:
+                listi.insert(x + 1, tala)
                 return True
 
 
-#tala = int(input("Veldu tölu til að bæta í listann: "))
-tala = 5
 print(rada_listi)
+tala = int(input("Veldu tölu til að bæta í listann: "))
+# tala = 5
 print(rada(tala, rada_listi))
 print(rada_listi)
+
+
+print("\nDæmi 6:")
 
 
 class Node:
@@ -173,7 +181,7 @@ class Tree:
 
 t = Tree()
 
-print("\n---Find 8---")
+print("---Find 8---")
 print(t.find(8))
 print("---Insert---")
 print(t.insert(6))
@@ -184,5 +192,3 @@ print("----Find----")
 print(t.find(8))
 print(t.insert(8))
 print(t.find(8))
-
-
