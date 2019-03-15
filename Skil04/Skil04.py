@@ -118,7 +118,7 @@ tala = int(input("Veldu tölu til að bæta í listann: "))
 print(rada(tala, rada_listi))
 print(rada_listi)
 
-
+# 6
 print("\nDæmi 6:")
 
 

@@ -126,20 +126,15 @@ class Vigur:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-
     def prenta(self):
         print("(%d, %d)" % (self.x, self.y))
-
     def lengd(self):
         l = round(math.sqrt((self.x ** 2) + (self.y ** 2)), 3)
         return l
-
     def halli(self):
         return round(self.y / self.x, 2)
-
     def þvervigur(self):
         return Vigur(-self.y, self.x)
-
     def stefnuhorn(self):
         x = self.x
         y = self.y
@@ -149,7 +144,6 @@ class Vigur:
             return round(180 - math.degrees(-math.atan(y / x)), 2)
         else:
             return round(math.degrees(math.atan(y / x)), 2)
-
     def horn(self, v):
         a = self.x * v.x
         b = self.y * v.y
@@ -158,14 +152,11 @@ class Vigur:
         formula = (a + b) / (a1 * b1)
         h = round(math.degrees(math.acos(formula)), 2)
         return h
-
     def summa(self, v):
         return Vigur(self.x + v.x, self.y + v.y)
-
-
 # Keyrsluforrit
 print("-------------------Vigrar-------------------")
-v1 = Vigur(4, 4)
+v1 = Vigur(4, -3)
 v1.prenta()
 print("Lengd: ", v1.lengd())
 print("Halli: ", v1.halli())
@@ -173,9 +164,8 @@ vþ = v1.þvervigur()
 print("Þvervigur: ", end=" ")
 vþ.prenta()
 print("Stefnuhorn: ", v1.stefnuhorn())
-v2 = Vigur(1, 0)
+v2 = Vigur(1, -1)
 print("Horn milli vigra: ", v2.horn(v1))
 v3 = v1.summa(v2)
 print("Summa:", end=" ")
 v3.prenta()
-
