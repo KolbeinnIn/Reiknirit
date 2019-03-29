@@ -131,26 +131,40 @@ with open("triangle.txt", "r") as f:
     listi = skra.split("\n")
 
 
-summa = 0
-temp = 0
 for x in range(len(listi)):
     listi[x] = listi[x].split(" ")
     for i in range(len(listi[x])):
         listi[x][i] = int(listi[x][i])
 
 print(listi)
-print(summa)
+
+cache = {}
+talna_listi = []
+altsum = 0
 
 def maxPath(listi, lina, index):
     summa = listi[lina][index]
-    if len(listi) == lina+2:
-        return summa + max(listi[lina+1][index+1], listi[lina+1][index])
+    key = str(index)+","+str(lina)
+    #print(key)
+    if key in cache:
+        return cache[key]
+    if len(listi) == int(lina)+2:
+        #print(listi[lina + 1][index], listi[lina + 1][index+1])
+        gildi = summa + max(listi[lina + 1][index+1], listi[lina + 1][index])
+        print(max(listi[lina + 1][index+1], listi[lina + 1][index]))
+        cache[key] = gildi
+        #print(cache)
+        return gildi
     else:
-        summa += max(maxPath(listi,lina+1, index), maxPath(listi,lina+1,index+1))
+        gildi = summa + max(maxPath(listi, lina+1, index+1), maxPath(listi, lina+1, index))
+        #print(gildi-summa)
+        cache[key] = gildi
+        #print(cache)
+        return gildi
 
-print(maxPath(listi,0,0))
 
-
+print(maxPath(listi, 0, 0))
+print(cache)
 
 #print(listi)
 """print("Dæmi 1:")
