@@ -58,13 +58,11 @@ def flatarmal_falls(fall, efri, nedri):
         pretty_heildad = pretty_heildad.replace(x, "")
     if pretty_heildad[0] == "+":
         pretty_heildad = pretty_heildad[1:]
-    print(pretty_heildad)
 
     nytt_fall_a = heildad_fall.replace("x", str(nedri))
     nytt_fall_b = heildad_fall.replace("x", str(efri))
 
     flatarmal = round(abs(eval(nytt_fall_b) - eval(nytt_fall_a)), 5)
-    print("Flatarmál milli x-ás og %s =" % fall, flatarmal)
     return flatarmal
 
 
@@ -72,7 +70,7 @@ fall1 = input("Sláðu inn fall f(x): ")
 fall2 = input("Sláðu inn fall g(x): ")
 efri1 = float(input("Sláðu inn x fyrir efri mörk: "))
 nedri1 = float(input("Sláðu inn x fyrir neðri mörk: "))
-print("------------------------------------------------------")
+print("--------------------------------")
 
 flatarmal1 = flatarmal_falls(fall1, efri1, nedri1)
 flatarmal2 = flatarmal_falls(fall2, efri1, nedri1)
