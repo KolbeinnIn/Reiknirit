@@ -1,5 +1,5 @@
 # Kolbeinn Ingólfsson
-# Heildun og flatarmál
+# Skilaverkefni 6 - Reiknirit
 
 import re
 
