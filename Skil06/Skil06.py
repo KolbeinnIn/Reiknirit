@@ -173,7 +173,7 @@ for x in range(len(listi)):
     for i in range(len(listi[x])):
         listi[x][i] = int(listi[x][i])
 
-#print(listi)
+
 
 cache = {}
 talna_listi = []
@@ -203,7 +203,7 @@ def maxPath(listi, lina, index):
 
 s = maxPath(listi, 0, 0)
 
-#print(cache)
+
 summa = 0
 for x in cache.values():
     if s == list(x.keys())[0]:
@@ -229,7 +229,7 @@ for x in b:
 
 
 
-"""print("Dæmi 1:")
+print("Dæmi 1:")
 fall1 = input("Sláðu inn fall f(x): ")
 fall2 = input("Sláðu inn fall g(x): ")
 efri1 = float(input("Sláðu inn x fyrir efri mörk: "))
@@ -240,7 +240,7 @@ flatarmal1 = flatarmal_falls(fall1, efri1, nedri1)
 flatarmal2 = flatarmal_falls(fall2, efri1, nedri1)
 
 print("Flatarmál f(x) og g(x) =", abs(round(flatarmal1 - flatarmal2, 5)))
-"""
+
 
 print("\nDæmi 2:")
 t = Tree()
@@ -257,12 +257,12 @@ print(5, t.insert(5))
 print(7, t.insert(7))
 print(12, t.insert(12))
 print(7, t.insert(7))
-"""print("----Find----")
+print("----Find----")
 print(8, t.find(8))
 print("---Insert---")
 print(8, t.insert(8))
 print(8, t.find(8))
-"""
+
 print("-PreOrderPrint-")
 t.preOrder()
 print("-PostOrderPrint-")
