@@ -14,7 +14,7 @@ def flatarmal_falls(fall, efri, nedri):
         if x == "+" or x == "-":
             merki.append(x)
 
-    fall_listi = re.split('[+-]', fall)git
+    fall_listi = re.split('[+-]', fall)
     try:
         fall_listi.remove("")
     except:
