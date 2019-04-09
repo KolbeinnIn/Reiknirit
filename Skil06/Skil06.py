@@ -205,6 +205,7 @@ s = maxPath(listi, 0, 0)
 
 
 summa = 0
+leid = 0
 for x in cache.values():
     if s == list(x.keys())[0]:
         leid = x
