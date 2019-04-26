@@ -23,6 +23,16 @@ def merkin(fall):
         pass
     return fall_listi, merki
 
+
+def check_index(string):
+    listi = ["sin", "cos", "tan", "cot"]
+    for x in listi:
+        if x in string:
+            return x
+    return False
+
+print(check_index("asdasdasdsinasdasdasd"))
+
 def diffrun(fall):
     oll_merkin = merkin(fall)
     fall_listi = oll_merkin[0]
@@ -30,7 +40,14 @@ def diffrun(fall):
     diffrad = []
     for x in fall_listi:
         if "x" in x:
+            sct = check_index(x)
             stadur = x.index("x")
+            if sct:
+                if sct in x:
+                    stadur2 = x.index(sct)
+                    print(stadur2, "bøísår")
+
+
             temp_listi1 = x[:stadur]
             temp_listi2 = x[stadur + 1:]
             if stadur == 0 and len(x) == 2:
