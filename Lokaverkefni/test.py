@@ -6,8 +6,16 @@ def master(func, args=""):
         return func(args)
 
 
-
 def merkin(fall):
+    try:
+        m = re.search(".*\(([A-Za-z0-9_+-]+)\)", fall)
+        print(m.group(1),"---------------------------------------")
+        temp = "(%s)" % m.group(1)
+        fall = fall.replace(temp, "")
+        print(temp)
+    except:
+        pass
+
     if fall[0] != "-":
         fall = "+" + fall
 
@@ -17,10 +25,18 @@ def merkin(fall):
             merki.append(x)
 
     fall_listi = re.split('[+-]', fall)
+
     try:
         fall_listi.remove("")
     except:
         pass
+    listi = ["sin", "cos", "tan", "cot"]
+    print(fall_listi)
+    for x in range(len(fall_listi)):
+        for i in listi:
+            if i == fall_listi[x]:
+                fall_listi[x] = fall_listi[x] + temp
+    print(fall_listi)
     return fall_listi, merki
 
 
@@ -31,55 +47,81 @@ def check_index(string):
             return x
     return False
 
-print(check_index("asdasdasdsinasdasdasd"))
+
 
 def diffrun(fall):
     oll_merkin = merkin(fall)
     fall_listi = oll_merkin[0]
     merki = oll_merkin[1]
     diffrad = []
-    for x in fall_listi:
-        if "x" in x:
-            sct = check_index(x)
-            stadur = x.index("x")
+    dicta = {"sin": "cos", "cos": "-sin"}
+    for x in range(len(fall_listi)):
+        if "x" in fall_listi[x]:
+            i = fall_listi[x]
+            sct = check_index(i)
+            stadur = i.index("x")
             if sct:
-                if sct in x:
-                    stadur2 = x.index(sct)
-                    print(stadur2, "bøísår")
+                if sct in i:
+                    print(i)
+                    temp = ""
+                    tempx = ""
+                    eks = False
+                    for j in i:
+                        if eks and j != ")":
+                            tempx += j
+                        if j == "(":
+                            eks = True
+                        elif j != "(" and not eks:
+                            temp += j
+                    print(temp,"123")
+                    print(tempx,"asd")
+                    for key,value in dicta.items():
+                        if key == temp:
+                            if "+" in temp or "-" in temp:
+                                kedja = "(%s)" % str(diffrun(tempx))
+                            else:
+                                kedja = str(diffrun(tempx))
+                            temp = value+"(%s)*" % tempx + kedja
+                            diffrad.append(temp)
 
 
-            temp_listi1 = x[:stadur]
-            temp_listi2 = x[stadur + 1:]
-            if stadur == 0 and len(x) == 2:
-                #x2
-                framan = int(x[stadur + 1])
-                veldi = framan-1
-                if veldi != 1 or veldi != 0:
-                    if veldi == 1:
-                        diffrad.append(str(framan) + "*(x)")
-                    elif veldi == 0:
-                        diffrad.append(str(framan))
-                else:
-                    diffrad.append(str(framan) + "*(x)**" + str(veldi))
+            else:
+                i = fall_listi[x]
+                temp_listi1 = i[:stadur]
+                temp_listi2 = i[stadur + 1:]
+                if stadur == 0 and len(i) == 2:
+                    # x2
+                    framan = int(i[stadur + 1])
+                    veldi = framan - 1
+                    if veldi != 1 or veldi != 0:
+                        if veldi == 1:
+                            diffrad.append(str(framan) + "*x")
+                        elif veldi == 0:
+                            diffrad.append(str(framan))
+                    else:
+                        diffrad.append(str(framan) + "*x**" + str(veldi))
 
-            elif stadur != 0 and len(x) > 2:
-                #2x5
-                framan = str(int(x[:stadur]) * (int(x[stadur + 1])))
-                print(framan)
-                veldi = str(int(x[stadur + 1]) - 1)
-                diffrad.append(framan + "*(x)**" + veldi)
+                elif stadur != 0 and len(i) > 2:
+                    # 2x5
+                    framan = str(int(i[:stadur]) * (int(i[stadur + 1:])))
+                    print(framan)
+                    veldi = str(int(i[stadur + 1:]) - 1)
+                    if veldi == "1":
+                        diffrad.append(framan + "*x")
+                    else:
+                        diffrad.append(framan + "*x**" + veldi)
 
-            elif stadur == 0 and len(x) == 1:
-                #bara x með engu
-                diffrad.append("1")
+                elif stadur == 0 and len(i) == 1:
+                    # bara x með engri tölu fyrir framan né veldi.
+                    diffrad.append("1")
 
-            if len(temp_listi1) != 0 and len(temp_listi2) == 0:
-                #5x í engu veldi
-                framan = str(int(x[:stadur]))
-                diffrad.append(framan)
+                if len(temp_listi1) != 0 and len(temp_listi2) == 0:
+                    # 5x í engu veldi
+                    framan = str(int(i[:stadur]))
+                    diffrad.append(framan)
 
         else:
-            #5 í engu veldi
+            # 5 í engu veldi
             # gerir ekki neitt, else er bara hérna til að sýna að ef það er ekkert x þá dettur talan bara út
             pass
 
@@ -87,19 +129,16 @@ def diffrun(fall):
     for x in range(len(diffrad)):
         diffrad_fall += merki[x] + diffrad[x]
 
-    #print(diffrad_fall)
+    # print(diffrad_fall)
 
-    listi = ["*", "(", ")"]
+    listi = ["*"]
     pretty_diffrad = diffrad_fall
     for x in listi:
         pretty_diffrad = pretty_diffrad.replace(x, "")
-    if pretty_diffrad[0] == "+":
+    if pretty_diffrad[0] == "+" or pretty_diffrad[:2] == "--":
         pretty_diffrad = pretty_diffrad[1:]
 
     return pretty_diffrad
-
-
-
 
 
 def flatarmal_falls(fall, efri, nedri):
@@ -118,8 +157,8 @@ def flatarmal_falls(fall, efri, nedri):
                 heildad.append(framan + "*(x)**" + veldi)
 
             elif stadur != 0 and len(x) > 2:
-                framan = str(int(x[:stadur]) / (int(x[stadur + 1]) + 1))
-                veldi = str(int(x[stadur + 1]) + 1)
+                framan = str(int(x[:stadur]) / (int(x[stadur + 1:]) + 1))
+                veldi = str(int(x[stadur + 1:]) + 1)
                 heildad.append(framan + "*(x)**" + veldi)
 
             elif stadur == 0 and len(x) == 1:
@@ -190,7 +229,7 @@ while True:
         func = diffrun
         print("Dæmi um fall: x2+5x+3")
         fall = input("Sláðu inn fall: ")
+        fall = fall.replace(" ", "")
 
     print(master(func, fall))
     print()
-
