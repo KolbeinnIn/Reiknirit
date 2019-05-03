@@ -8,35 +8,85 @@ def master(func, args=""):
 
 def merkin(fall):
     try:
+        """
+        
+        
         m = re.search(".*\(([A-Za-z0-9_+-]+)\)", fall)
         print(m.group(1),"---------------------------------------")
-        temp = "(%s)" % m.group(1)
+        temp = "(%s)" % m.group(0)
         fall = fall.replace(temp, "")
         print(temp)
+        """
+        stadur1 = 0
+        stadur2 = 0
+        s = fall
+        for x in range(len(s)):
+            if s[x] == "(":
+                stadur1 = x+1
+                break
+        s2 = ""
+        for x in range(len(s), 0, -1):
+            s2 += s[x-1]
+        for x in range(len(s2)):
+            if s2[x] == ")":
+                stadur2 = x
+                break
+        undan = s[:stadur1]
+        inni = "(%s%s)" % (undan ,s[stadur1:(len(s)-stadur2)])
+
+
+        temp = inni
     except:
         pass
+        print("fór í except í merkin")
+
 
     if fall[0] != "-":
         fall = "+" + fall
+
 
     merki = []
     for x in fall:
         if x == "+" or x == "-":
             merki.append(x)
 
+    fall2 = ""
+    a1 = 0
+    a2 = 0
+    for x in range(len(fall)):
+        if fall[x] == ")":
+            a1 = x + 1
+            break
+    for x in range(len(fall), 0, -1):
+        if fall[x-1] == "(":
+            a2 = x-1
+            break
+    fall2 = fall[a2+1:a1-1]
+    print("Fall2 er", fall2)
+    print("fall1 er", fall)
+
+    b_listi = re.split('[+-]', fall2)
+    print(b_listi,"blisti")
     fall_listi = re.split('[+-]', fall)
 
-    try:
-        fall_listi.remove("")
-    except:
-        pass
+
+    temp_listi = []
+    for x in b_listi:
+        for i in range(len(fall_listi)):
+            print(fall_listi,"jhasd")
+            if x in fall_listi[i] and x not in temp_listi:
+                fall_listi[i] = fall_listi[i].replace(x, "")
+                fall_listi.insert(-1, x)
+                temp_listi.append(x)
+
+    fall_listi.remove("")
+
     listi = ["sin", "cos", "tan", "cot"]
-    print(fall_listi)
     for x in range(len(fall_listi)):
         for i in listi:
             if i == fall_listi[x]:
                 fall_listi[x] = fall_listi[x] + temp
-    print(fall_listi)
+
     return fall_listi, merki
 
 
@@ -62,33 +112,63 @@ def diffrun(fall):
             stadur = i.index("x")
             if sct:
                 if sct in i:
-                    print(i)
                     temp = ""
                     tempx = ""
                     eks = False
-                    for j in i:
-                        if eks and j != ")":
-                            tempx += j
-                        if j == "(":
+                    teljari = 0
+                    for j in range(len(i)):
+                        if eks and i[j-1] != ")":#and teljari2 == teljari1:
+                            tempx += i[j]
+                            print("went in", tempx)
+
+                        if i[j] == "(" and eks:
+                            teljari += 1
+                        if i[j] == "(":
                             eks = True
-                        elif j != "(" and not eks:
-                            temp += j
-                    print(temp,"123")
-                    print(tempx,"asd")
+
+                        elif i[j] != "(" and not eks:
+                            temp += i[j]
+                            #print(temp)
+
+                        #print("þetta er tempx í for lykkjunni", tempx, "teljarinn er",teljari)
+                    for x in range(teljari-1):
+                        tempx+=")"
+
                     for key,value in dicta.items():
+                        print(temp,"þetta er temp ")
+                        print(key,"þetta er key ")
                         if key == temp:
                             if "+" in temp or "-" in temp:
+                                print(tempx, "1")
                                 kedja = "(%s)" % str(diffrun(tempx))
                             else:
+                                print(tempx, "2")
                                 kedja = str(diffrun(tempx))
                             temp = value+"(%s)*" % tempx + kedja
+                            print(temp)
                             diffrad.append(temp)
+                            #print(diffrad)
+
+                    #teljari = 0
 
 
             else:
+                print(fall_listi)
                 i = fall_listi[x]
+                i = i.replace("(", "")
+                i = i.replace(")", "")
+                print("Þetta er i", i)
+                print("lengdin af i",len(i))
+
                 temp_listi1 = i[:stadur]
                 temp_listi2 = i[stadur + 1:]
+
+                if len(temp_listi1) != 0 and len(temp_listi2) == 0 and len(i) != 1:
+                    # 5x í engu veldi
+                    framan = str(int(i[:stadur]))
+                    diffrad.append(framan)
+                    print("IT WENT IN COOLCOOL")
+
                 if stadur == 0 and len(i) == 2:
                     # x2
                     framan = int(i[stadur + 1])
@@ -104,7 +184,6 @@ def diffrun(fall):
                 elif stadur != 0 and len(i) > 2:
                     # 2x5
                     framan = str(int(i[:stadur]) * (int(i[stadur + 1:])))
-                    print(framan)
                     veldi = str(int(i[stadur + 1:]) - 1)
                     if veldi == "1":
                         diffrad.append(framan + "*x")
@@ -115,10 +194,9 @@ def diffrun(fall):
                     # bara x með engri tölu fyrir framan né veldi.
                     diffrad.append("1")
 
-                if len(temp_listi1) != 0 and len(temp_listi2) == 0:
-                    # 5x í engu veldi
-                    framan = str(int(i[:stadur]))
-                    diffrad.append(framan)
+                print("len(temp_listi1)",len(temp_listi1))
+                print("len(temp_listi2)",len(temp_listi2))
+
 
         else:
             # 5 í engu veldi
@@ -126,10 +204,9 @@ def diffrun(fall):
             pass
 
     diffrad_fall = ""
+    print("súper diffrað",diffrad)
     for x in range(len(diffrad)):
         diffrad_fall += merki[x] + diffrad[x]
-
-    # print(diffrad_fall)
 
     listi = ["*"]
     pretty_diffrad = diffrad_fall
@@ -204,7 +281,7 @@ flatarmal2 = flatarmal_falls(fall2, efri1, nedri1)
 print("Flatarmál f(x) og g(x) =", abs(round(flatarmal1 - flatarmal2, 5)))
 """
 
-val_listi = ["Heilda fall", "Flatarmál milli falla", "Staðbundin útgildi á falli", "Diffra fall", "Rúmmál snúða"]
+val_listi = ["Heilda fall", "Flatarmál milli falla", "Diffra fall", "Rúmmál snúða"]
 
 while True:
     for x in range(len(val_listi)):
