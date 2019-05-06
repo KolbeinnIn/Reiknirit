@@ -1,39 +1,18 @@
 import re
 import math
 
-def master(func, args=""):
+def master(func, args=""): #hér er fall til að einfalda kóðann aðeins þegar notandi velur hvað hann vill gera.
+    #fallið tekur inn annað fall sem notandi valdi og það sem hann vill setja í fallið (parametra) og kallar í það
+    #Sjá kóða og comments alveg neðst í skjalinu.
     if args != "":
         return func(args)
 
 
 def merkin(fall):
-    try:
-        """
-        m = re.search(".*\(([A-Za-z0-9_+-]+)\)", fall)
-        print(m.group(1),"---------------------------------------")
-        temp = "(%s)" % m.group(0)
-        fall = fall.replace(temp, "")
-        print(temp)
-        """
-        stadur1 = 0
-        stadur2 = 0
-        s = fall
-        for x in range(len(s)):
-            if s[x] == "(":
-                stadur1 = x + 1
-                break
-        s2 = ""
-        for x in range(len(s), 0, -1):
-            s2 += s[x - 1]
-        for x in range(len(s2)):
-            if s2[x] == ")":
-                stadur2 = x
-                break
-        undan = s[:stadur1 - 1]
-    except:
-        pass
+    #Fallið merkin finnur + og - í fallinu og setur það í lista í réttri röð
+    #listinn er notaður seinna til að bæta því inn í lokaútkomuna
 
-    if fall[0] != "-":
+    if fall[0] != "-": #til að halda jafn mörgum merkjum og eru liðir í dæminu bætist + fyrir framan ef það er ekki - nú þegar
         fall = "+" + fall
 
     merki = []
@@ -44,48 +23,53 @@ def merkin(fall):
     fall2 = ""
     a1 = 0
     a2 = 0
+    # við viljum fá innstu tvo svigana, hér telur for lykkja frá vinstri til að finna innsta svigann sem lokar
     for x in range(len(fall)):
         if fall[x] == ")":
             a1 = x + 1
             break
-    for x in range(len(fall), 0, -1):
+    # væri líka hægt að gera for x in range(len(fall[::-1)): en þetta er læsilegra
+    for x in range(len(fall), 0, -1): # hér fer for lykkjan í öfuga átt til að finna fyrsta svigann sem opnark, talinn frá hægri
         if fall[x - 1] == "(":
             a2 = x - 1
             break
+    # cos(cos(cos(x)))
+    # finnur þá svigana sem eru inni í gæsalöppum
+    # cos(cos(cos"("x")"))
 
     fall2 = fall[a2 + 1:a1 - 1]
+    #fall2 er þá það sem er í innstu svigunum, notað fyrir keðjuregluna
 
-    # fall_listi = re.split('[+-]', fall)
+    # hér tökum við plúsinn af sem við bættum við aðeins fyrr vegna þess að hann er kominn í listann
+    # og þarf ekki að vera í fallinu lengur
     if fall[0] == "+":
         fall = fall[1:]
-    # if "/" in fall or "*" in fall:
 
-    #print("pre", fall)
-    if check_index(fall):
-        #print("post", fall)
+    if check_index(fall): #check_index fallið kíkir hvort sin,cos,tan og framveigis er í fallinu. og setur það í lista
         fall_listi = [fall]
-    else:
-        fall_listi = re.split('[+-]', fall)
+    else: #ef það er ekki sin eða cos og svoleiðis er fallinu splittað í marga liði með + og -
+        fall_listi = re.split('[+-]', fall) #einfaldara að nota re.split frekar en built-in .split vegna þess að re.split getur splittað á fleiri en einum staf, (+ og -)
         for x in range(len(fall_listi)):
-            fall_listi[x] = fall_listi[x].replace(")", "")
+            fall_listi[x] = fall_listi[x].replace(")", "") #óþarfa svigar teknir
             fall_listi[x] = fall_listi[x].replace("(", "")
 
     try:
-        fall_listi.remove("")
+        fall_listi.remove("")# bætist oft tómt stak í listann, það er fjarlægt hér, það kemur error ef það er ekki, þess vegna try og except
     except:
         pass
 
-    listi = ["sin", "cos", "tan", "cot", "ln"]
+    listi = ["sin", "cos", "tan", "cot", "ln"] #listinn yfir föllum sem þarf að kíkja á
     for x in range(len(fall_listi)):
         for i in listi:
-            if i == fall_listi[x]:
+            if i == fall_listi[x]: #finnum hvar sin,cos,tan... er í listanum og bætum því sem var í innsta sviganum þar inn.
                 fall_listi[x] = fall_listi[x] + "(%s)" % fall2
 
-    # print(fall_listi,"þetta er fall listinn")
+    #return lista með föllum í sem þarf að diffra og merkjunum.
     return fall_listi, merki
 
 
 def check_index(string):
+    #fall sem finnur hvort sin,cos,tan,cot og ln er í dæminu og skilar staðsetningu þess, ef það finnur ekki, returnar það False
     listi = ["sin", "cos", "tan", "cot", "ln"]
     for x in listi:
         if x in string:
@@ -94,45 +78,32 @@ def check_index(string):
 
 
 def u_v(fall):
+    #kallað er í þetta fall ef fallið "diffrun" finnur "/" eða "*" í fallinu.
     if "/" in fall:
-        u_v_listi = fall.split('/')
-        u = u_v_listi[0]
-        v = u_v_listi[1]
+        u_v_listi = fall.split('/') #splittar í u og v, u fyrir ofan strik, v fyrir neðan
 
-        #print("Nú diffast u")
-        du = diffrun(u)
-        #print("Nú diffast v")
-        dv = diffrun(v)
+        u = u_v_listi[0] #u eða f(x)
+        v = u_v_listi[1] #v eða g(x)
 
-        """print("u", u)
-        print("du", du)
-        print("v", v)
-
-        print("dv", dv)"""
-
+        du = diffrun(u) #diffrað u eða f'(x)
+        dv = diffrun(v) #diffrað v eða g'(x)
 
         bandstrik = ""
         for x in range(len("%s*%s - %s*%s" % (du, v, u, dv)) + 1):
             bandstrik += "-"
 
+
         formula = "%s*%s) - %s*(%s)\n%s\n(%s)^2" % (du, v, u, dv, bandstrik, v)
 
     elif "*" in fall:
-        u_v_listi = fall.split('*')
+        u_v_listi = fall.split('*') #splittar í u og v, alveg eins og hér fyrir ofan nema bara margföldun
         u = u_v_listi[0]
         v = u_v_listi[1]
 
         du = diffrun(u)
         dv = diffrun(v)
-        """
-        print("u", u)
-        print("du", du)
-        print("v", v)
-        print("dv", dv)
-        """
         formula = "%s*%s) + %s*(%s" % (du, v, u, dv)
 
-    #print("u og v reglan", formula)
     return formula
 
 
@@ -142,36 +113,30 @@ def diffrun(fall):
     merki = oll_merkin[1]
     diffrad = []
     diffrad_uv = []
-    #print("listinn sem diffrun fær", fall_listi)
     dicta = {"sin": "cos", "cos": "-sin", "tan": "sec2", "cot": "-csc2", "ln": "1/"}
-    # print(fall_listi, "diffrun fær þennan")
     for x in range(len(fall_listi)):
         if "x" in fall_listi[x]:
             if "/" in fall_listi[x] or "*" in fall_listi[x]:
                 diffrad.append(u_v(fall_listi[x]))
             else:
                 i = fall_listi[x]
-                sct = check_index(i)
-                stadur = i.index("x")
-                if sct:
+                sct = check_index(i) #athugar hvort það er sin cos tan.... í stakinu
+                if sct: #ef það er.
                     if sct in i:
                         temp = ""
                         tempx = ""
-                        eks = False
+                        eks = False #eks er "x" nema skrifað öðruvísi, eks verður true þegar það finnur sviga sem opnast,
+                        #þetta er leið til að finna það sem er inni í sviganum
+                        #þessir teljarar passa uppá að það lokast jafn margir svigar og opnast, talað er um það vandamál í dagbókinni undir 03.05
                         teljari = 0  # telur hversu margir ) eru komnir
                         teljari1 = -1  # telur hversu margir ( eru komnir
-                        teljari2 = i[:-1].count(")")
 
                         for j in range(len(i)):
-                            # print(eks, teljari < teljari1)
                             if eks and teljari <= teljari1:
                                 if teljari == teljari1 and teljari != 0:
                                     pass
                                 else:
                                     tempx += i[j]
-                                    # print("went in", tempx)
-
-                            # if i[j] == "(" and eks:
 
                             if i[j] == "(":  # teljari 1 (
                                 eks = True
@@ -180,63 +145,70 @@ def diffrun(fall):
                             if i[j] == ")" and eks:  # teljari )
                                 teljari += 1
 
-
-
                             elif i[j] != "(" and not eks:
                                 temp += i[j]
-                                # print(temp)
 
-                        if not check_index(tempx) and tempx[-1] == ")":  # confirmed rétt if setning og allt inni í henni
-                            # print("súper dúper tempx", tempx)
+                        if not check_index(tempx) and tempx[-1] == ")":
                             tempx = tempx[:-1]
 
                         for key, value in dicta.items():
-                            if key == temp:
-                                if "+" in temp or "-" in temp:
-                                    kedja = "(%s)" % str(diffrun(tempx))
+                            temp_temp = re.sub(r'[+-]', "", temp) #það eru engir + né - í keys í dictionary-inu
+                            # þannig þeir eru fjarlægðir hér án þess að breyta temp-inu sjálfu
+                            if key == temp_temp:
+                                if "+" in temp_temp or "-" in temp_temp:
+                                    kedja = "(%s)" % str(diffrun(tempx)) #endurkvæmni
                                 else:
-                                    kedja = str(diffrun(tempx))
-                                if "/" in value:
-                                    temp = "(%s)" % (kedja) + value + tempx
+                                    temp_diffrun = diffrun(tempx)
+                                    if temp_diffrun != "":
+                                        kedja = "(%s)" % temp_diffrun #endurkvæmni
+                                    else:
+                                        kedja = ""
+
+                                if "/" in value: #þetta er bara hér ef ln(x2) er sett inn, þá er það diffrað sem 1/x2 og þá er komið "/"
+                                    #útkoman er þá (2x)1/x2 í stað 1/x2(2x)
+                                    if kedja != "": #ef kedjureglan var notuð
+                                        temp = "(%s)" % (kedja) + value + tempx
+                                    else: #ef keðjureglan var ekki notuð, t.d. í ln(x) væri rétta svarið 1/x en ekki ()1/x
+                                        temp = value + tempx #sviginn er ekki hérna vegna þess að það yrði ekkert inni í honum
                                 else:
-                                    temp = value + "(%s)*" % tempx + kedja
+                                    temp = value + "(%s)" % tempx + kedja
 
-                                diffrad.append(temp)
+                                diffrad.append(temp) # diffraða dæmið bætist í listann
 
-                else:
+                else: #ef það er ekki sin cos tan....
+                    #ef það eru óþarfa svigar þá eru þeir teknir í burtu
                     i = fall_listi[x]
-                    #print("fall listinn", fall_listi)
                     i = i.replace("(", "")
                     i = i.replace(")", "")
 
-                    temp_listi1 = i[:stadur]
-                    temp_listi2 = i[stadur + 1:]
-                    #print(temp_listi1)
-                    #print(temp_listi2)
-                    #print("i er", i)
+                    stadur = i.index("x")  # staðsetningin á x
+                    temp_listi1 = i[:stadur] #allt fyrir framan x.
+                    temp_listi2 = i[stadur + 1:] #allt fyrir aftan x (veldi)
                     if len(temp_listi1) != 0 and len(temp_listi2) == 0 and len(i) != 1:
-                        # 5x í engu veldi
+                    # ef það er eitthvað fyrir framan x og ekkert fyrir aftan.
+                        # forritið fer í þessa if setningu ef það er tala fyrir framan x í engu veldi. t.d. 5x
                         framan = str(int(i[:stadur]))
                         diffrad.append(framan)
 
                     if stadur == 0 and len(i) >= 2:
-                        # x2, x3, x27
-                        framan = int(i[stadur + 1:])
-                        veldi = framan-1
-                        if veldi != 0:
-                            if veldi == 1:
-                                #print("asd", i)
-                                #print("asdasdasd " + str(framan) + "*x")
-                                #print("veldi", veldi)
-                                diffrad.append(str(framan) + "*x")
+                        # if stadur == 0 gerir það sama og len(temp_listi1) != 0, bæði athugar hvort það er eitthvað fyrir framan x,
+                        # x er alltaf 1 af len(i) þannig ef len(i) >= 2 þá er veldi,
+                        # ástæðan fyrir stærra en er vegna þess að veldið á að geta verið stærra en 9, þá er len(i) 3
 
-                            elif veldi > 1:
+                        # forritið fer í þessa if setningu ef það er EKKI tala fyrir framan x í veldi. x2, x3, x27
+                        framan = int(i[stadur + 1:]) #það sem á að fara fyrir framan x (veldið)
+                        veldi = framan-1 #veldið eftir diffrun, þess vegna -1
+                        if veldi != 0: #ef veldið er EKKI 0
+                            if veldi == 1: #ef veldið er 1 þá bætist 2 framaná og bara *x aftaná
+                                diffrad.append(str(framan) + "*x") #basically bara x2 verður 2x
+
+                            elif veldi > 1:# en ef það stærra en 1 bætist það aftaná
                                diffrad.append(str(framan) + "*x**" + str(veldi))
                         else:
                             diffrad.append(str(framan) + "*x**" + str(veldi))
 
                     elif stadur != 0 and len(i) > 2:
-                        # 2x5
+                        # forritið fer í þessa if setningu ef það ER tala fyrir framan x OG í veldi. 2x2, 6x3, 157x27
                         framan = str(int(i[:stadur]) * (int(i[stadur + 1:])))
                         veldi = str(int(i[stadur + 1:]) - 1)
                         if veldi == "1":
@@ -244,54 +216,56 @@ def diffrun(fall):
                         else:
                             diffrad.append(framan + "*x**" + veldi)
 
-
         else:
-            # 5 í engu veldi
+            # tala í engu veldi
             # gerir ekki neitt, else er bara hérna til að sýna að ef það er ekkert x þá dettur talan bara út
             pass
 
+    #Hér byrjar forritið að úitfæra loka lausnina á fallegan máta, -cos(x3)(3x2) í stað -cos(x**3)*3*x**2
     diffrad_fall = ""
-    #print("+=diffrad", diffrad)
     for x in range(len(diffrad)):
         diffrad_fall += merki[x] + diffrad[x]
-
     listi = ["*"]
-    #print("diffrad_fall", diffrad_fall)
     pretty_diffrad = diffrad_fall
 
-    if diffrad_fall != "":
-        if check_index(diffrad_fall):
+    if diffrad_fall != "": #ef að það er eitthvað í fallinu
+        if check_index(diffrad_fall): #kíkja hvort það er sin, cos, tan og slíkt í fallinu
             if diffrad_fall[-1] == "*":
-                diffrad_fall = diffrad_fall[:-1]
-                #print("remove last star", diffrad_fall)
-            #(diffrad_fall)
-            asd = False
-
-
+                #vegna keðjureglunnar bætist við margföldunarmerki aftast þótt að það er ekkert aftast.
+                #Dæmi: sin(x) verður cos(x)*1 en *1 gerir ekki neitt þannig ásinn bætist ekki við aftast en margföldunarmerkið verður samt.
+                diffrad_fall = diffrad_fall[:-1] #hér fer seinasta stjarnan ef hún er til staðar
+            kedjureglan = False
             try:
-                asd = diffrad_fall.index(")*")
-            except:
+                kedjureglan = diffrad_fall.index(")*") #kíkja hvar diffraða fallið endar og keðjureglan byrjar, cos(x2)*(2x)
+            except: #ef .index() built-in fallið finnur það ekki kemur error, þetta try og expect kemur í veg fyrir errorinn
                 pass
-            if asd:
-                temp1 = diffrad_fall[:asd+1]
-                temp2 = diffrad_fall[asd+2:]
+
+            if kedjureglan: # ef .index fann ")*"
+                temp1 = diffrad_fall[:kedjureglan+1]
+                temp2 = diffrad_fall[kedjureglan+2:]
                 temp1 = temp1.replace("*", "")
                 temp2 = temp2.replace("*", "")
-                #print("potential svigi", temp2)
-                nytt = "%s(%s)" % (temp1,temp2)
+                nytt = "%s(%s)" % (temp1,temp2) #hér bætist sviginn utan um það sem diffraðist inni í falli (keðjureglan), talað er um það í dagbókinni líka
                 pretty_diffrad = nytt
-                #print("nýtt", nytt)
+
+        else: #ef það er ekki fall inni í falli (sin, cos, tan og það), er engin keðjuregla þannig það er bara hægt að taka * alveg
+            pretty_diffrad = diffrad_fall.replace("*","")
 
 
     try:
-        if pretty_diffrad[0] == "+" or pretty_diffrad[:2] == "--":
+        # try og except er hér vegna þess að ef eitthvað annað fer úrskeðis í forritinu (eins og gerist á meðan maður forritar)
+        # þá endaði errorinn mjög oft hér vegna þess að pretty_diffrad væri tómt, einnig er það hér útaf user error
+        if pretty_diffrad[0] == "+":
             pretty_diffrad = pretty_diffrad[1:]
+        elif pretty_diffrad[:2] == "--":
+            pretty_diffrad = pretty_diffrad[2:]
     except:
         pass
 
+    #skilar loka útkomu
     return pretty_diffrad
 
-# returnar heilduðu falli ekki pretty printað, dæmi: 2*x**2 væri 2x2 pretty printað, þetta er bara til að geta notað eval() fallið.
+# heildun fallið returnar heilduðu falli EKKI pretty printað, dæmi: 2*x**2 væri 2x2 pretty printað, þetta er bara til að geta notað eval() fallið.
 def heildun(fall):
     merkin1 = merkin(fall)
     fall_listi = merkin1[0]
@@ -329,7 +303,6 @@ def heildun(fall):
         else:
             temp_s = fall_listi.index(x)
             temp = fall_listi[temp_s]
-            print("scooby snacks",temp)
             if temp == "1":
                 heildad.append("x")
             elif temp == "0":
@@ -345,7 +318,6 @@ def heildun(fall):
 
 def rummal_snuda(fall):
     asd = heilda(fall)
-    print(asd)
 
     return "Rúmmál: " + str(math.pi * (heilda(fall)))
 
@@ -401,7 +373,9 @@ while True:
             break
         except ValueError:
             print("Rangur innsláttur, reyndu aftur\n")
-
+    print("ATH! veldi eru skrifuð sem tala eftir x, x í veldinu 2 væri x2")
+    print("Útaf þessu er ekki hægt að setja veldi í - tölu, forritið tekur því sem venjulegri tölu t.d. x-2")
+    print("Vinsamlegast einfaldið föll, þetta er diffur og heildunar reiknivél ekki einföldunarvél.")
     func = ""
     fall = ""
     if val == 1:
@@ -418,7 +392,7 @@ while True:
         nedri = float(input("Sláðu inn x fyrir neðri mörk: "))
         fall1 = fall1.replace(" ", "")
         fall2 = fall2.replace(" ", "")
-        fall = (fall1, fall2, efri, nedri)
+        fall = (fall1, fall2, efri, nedri) #inputtar sem tuple
 
     elif val == 3:
         func = diffrun
@@ -444,10 +418,10 @@ while True:
         print("Rangur innsláttur, reyndu aftur\n")
     if val == 1:
         utkoma = master(func, fall)
-        if utkoma == " ":
+        if utkoma == " ": #ef notandi vildi endilega heilda töluna 0 þá auðvitað kemur ekkert út
             print("C")
-        else:
-            print(master(func, fall)+"+ C")
+        else: #ef notandi vildi heilda tölu sem er ekki 0
+            print(master(func, fall)+" + C")
     else:
         print(master(func, fall))
     print()

@@ -1,4 +1,5 @@
+import re
 
-asd = "asd*"
+asd = "-sin+cos"
 
-print(asd[:-1])
+print(re.sub(r'[+-]', "", asd))
