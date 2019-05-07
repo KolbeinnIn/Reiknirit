@@ -366,7 +366,7 @@ def heilda(fall):
     else:
         fall_listi = merkin(fall)
         heildad_fall = heildun(fall)
-
+    
     listi = ["*", "(", ")"]
     pretty_heildad = heildad_fall
     for x in listi:
