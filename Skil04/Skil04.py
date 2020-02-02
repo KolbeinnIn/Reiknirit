@@ -67,7 +67,7 @@ print("")
 
 # 3
 def bin(tala, listi, low, high):
-    if low <= high and tala < high:
+    if low <= high:
         mid = (high + low) // 2
         if tala == listi[mid]:
             return mid
